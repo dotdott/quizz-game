@@ -1,12 +1,27 @@
 import { createActions, createReducer } from "reduxsauce";
 
+export interface IQuestionsState {
+  stateQuestions: IQuestions;
+}
 export interface IQuestions {
-  data: any;
+  data: IQuestionData[];
+  isLoading: boolean;
 
   error: string;
   category_id: number;
   amount_questions: number;
   difficulty: "easy" | "medium" | "hard";
+}
+
+export interface IQuestionData {
+  category: string;
+  difficulty: string;
+
+  question: string;
+
+  correct_answers: string;
+
+  incorrect_answers: string[];
 }
 
 const INITIAL_STATE: IQuestions = {
@@ -15,7 +30,10 @@ const INITIAL_STATE: IQuestions = {
   category_id: 9,
   amount_questions: 10,
   difficulty: "easy",
+
   error: "",
+
+  isLoading: false,
 };
 
 export const { Types, Creators } = createActions({
