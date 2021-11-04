@@ -10,7 +10,7 @@ export interface IQuestions {
   error: string;
   category_id: number;
   amount_questions: number;
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: "easy" | "medium" | "hard" | null;
 }
 
 export interface IQuestionData {
@@ -27,9 +27,9 @@ export interface IQuestionData {
 const INITIAL_STATE: IQuestions = {
   data: [],
 
-  category_id: 9,
+  category_id: -1,
   amount_questions: 10,
-  difficulty: "easy",
+  difficulty: null,
 
   error: "",
 
@@ -37,7 +37,7 @@ const INITIAL_STATE: IQuestions = {
 };
 
 export const { Types, Creators } = createActions({
-  questionsRequest: ["data", "category_id"],
+  questionsRequest: ["data", "category_id", "difficulty", "amount_questions"],
   questionsSuccess: ["data"],
   questionsFailure: ["data", "error"],
 
@@ -48,6 +48,9 @@ const questionsRequest = (state = INITIAL_STATE, action) => ({
   ...state,
   isLoading: true,
   data: action.data,
+  category_id: action.category_id,
+  difficulty: action.difficulty,
+  amount_questions: action.amount_questions,
 });
 
 const questionsSuccess = (state = INITIAL_STATE, action) => ({

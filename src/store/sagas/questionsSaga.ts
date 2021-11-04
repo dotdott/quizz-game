@@ -13,10 +13,12 @@ export function* questionsSaga(action) {
   const paramsData = new URLSearchParams();
 
   paramsData.append("amount", amount_questions.toString());
-  paramsData.append("amount", difficulty);
+  if (difficulty !== null) {
+    paramsData.append("difficulty", difficulty);
+  }
 
-  if (category_id && category_id !== "") {
-    paramsData.append("amount", category_id.toString());
+  if (category_id !== -1) {
+    paramsData.append("category", category_id.toString());
   }
 
   try {
@@ -24,7 +26,9 @@ export function* questionsSaga(action) {
       return api.get(`/api.php`, { params: paramsData });
     });
 
-    data = response.data;
+    data = response.data.results;
+
+    console.log(data);
     yield put({ type: Types.QUESTIONS_SUCCESS, data });
   } catch (error) {
     let message = "An Unknown Error has occurred!";

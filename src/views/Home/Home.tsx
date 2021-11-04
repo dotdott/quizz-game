@@ -13,6 +13,8 @@ import { Button } from "components";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { Types } from "store/reducers/questionsReducer";
 
 interface ICategoriesData {
   id: number;
@@ -34,6 +36,7 @@ const Home = () => {
   const handleSetCategory = (value: ICategoriesData) => {
     setSelectedCategory(value);
   };
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -49,11 +52,20 @@ const Home = () => {
         .integer(),
     }),
     onSubmit: ({ amount }) => {
-      console.log(amount);
+      handleSubmit(amount);
     },
   });
 
   const hasErrors = formik.touched && formik.errors.amount ? true : false;
+
+  const handleSubmit = async (amount: string) => {
+    return dispatch({
+      type: Types.QUESTIONS_REQUEST,
+      category_id: selectedCategory.id,
+      amount_questions: amount,
+      difficulty: difficulty,
+    });
+  };
 
   useEffect(() => {
     const getCategories = async () => {
@@ -63,7 +75,7 @@ const Home = () => {
 
         setCategories(data.trivia_categories);
       } catch (err) {
-        console.log(err);
+        alert(err);
       }
 
       setIsLoading(false);
