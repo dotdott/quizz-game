@@ -25,4 +25,24 @@
       color: #000;
     }
   }
+
+  &._dark {
+    background: transparent;
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.562);
+
+    &:hover {
+      background: rgb(184, 182, 182);
+    }
+  }
+
+  &._pink {
+    background: $state-pink !important;
+    color: #fff;
+    font-weight: 300;
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+  }
 }

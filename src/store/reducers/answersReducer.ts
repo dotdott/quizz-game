@@ -25,7 +25,7 @@ const INITIAL_STATE: IAnswers = {
 export const { Types, Creators } = createActions({
   setAnswers: ["answers", "total_correct", "date"],
 
-  CleanQuestions: [],
+  CleanAnswers: [],
 });
 
 const setAnswers = (state = INITIAL_STATE, action) => ({
