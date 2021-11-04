@@ -3,7 +3,6 @@ import LoadingScreen from "../../components/LoadingScreen";
 import { api } from "../../services/api";
 import "./styles.scss";
 import {
-  FormControlLabel,
   FormControl,
   Select,
   MenuItem,
@@ -11,6 +10,9 @@ import {
   TextField,
 } from "@material-ui/core";
 import { Button } from "components";
+
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 interface ICategoriesData {
   id: number;
@@ -27,10 +29,31 @@ const Home = () => {
     name: "",
   });
   const [difficulty, setDifficulty] = useState<string | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleSetCategory = (value: ICategoriesData) => {
     setSelectedCategory(value);
   };
+
+  const formik = useFormik({
+    initialValues: {
+      amount: "",
+    },
+    validationSchema: Yup.object().shape({
+      amount: Yup.number()
+        .transform((value) => Number(value))
+        .min(0, "Please, select how many questions you want in your quizz.")
+        .max(10, "The max amount value allowed is 10")
+        .required("Please, select how many questions you want in your quizz.")
+        .positive("Please enter an positive number")
+        .integer(),
+    }),
+    onSubmit: ({ amount }) => {
+      console.log(amount);
+    },
+  });
+
+  const hasErrors = formik.touched && formik.errors.amount ? true : false;
 
   useEffect(() => {
     const getCategories = async () => {
@@ -64,19 +87,34 @@ const Home = () => {
             </div>
           </div>
 
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault(), formik.handleSubmit();
+            }}
+          >
             <div className="home__form">
               <TextField
-                id="outlined-basic"
                 label="Amount"
+                type="number"
                 variant="outlined"
                 sx={{ mb: 2 }}
+                name="amount"
+                onChange={formik.handleChange}
+                value={formik.values.amount}
+                disabled={showConfirmation}
+                error={hasErrors}
               />
+              {hasErrors && (
+                <span className="home__form__errors">
+                  {formik.errors.amount}
+                </span>
+              )}
 
               <FormControl sx={{ mb: 2 }}>
                 <span>Filter by Category</span>
                 <Select
                   displayEmpty
+                  disabled={showConfirmation}
                   value={selectedCategory.name}
                   input={<OutlinedInput />}
                   renderValue={(selected) => {
@@ -86,7 +124,6 @@ const Home = () => {
 
                     return <em>{selected}</em>;
                   }}
-                  inputProps={{ "aria-label": "Without label" }}
                 >
                   <div style={{ maxHeight: 300 }}>
                     <MenuItem
@@ -117,7 +154,8 @@ const Home = () => {
                 <span>Filter by Difficulty</span>
                 <Select
                   displayEmpty
-                  value={difficulty}
+                  value={difficulty ?? "Select"}
+                  disabled={showConfirmation}
                   input={<OutlinedInput />}
                   renderValue={(selected) => {
                     if (!selected) {
@@ -143,12 +181,26 @@ const Home = () => {
                 </Select>
               </FormControl>
 
-              <div className="home__form__btns">
-                <Button btnClasses="_dark">Cancel</Button>
-                <Button btnClasses="_red" type="submit">
-                  Start
-                </Button>
-              </div>
+              {!showConfirmation ? (
+                <div
+                  className="home__form__btns"
+                  onClick={() => setShowConfirmation(true)}
+                >
+                  <Button btnClasses="_red">Continue</Button>
+                </div>
+              ) : (
+                <div className="home__form__btns">
+                  <Button
+                    btnFunction={() => setShowConfirmation(false)}
+                    btnClasses="_dark"
+                  >
+                    Cancel
+                  </Button>
+                  <Button btnClasses="_red" type="submit">
+                    Start
+                  </Button>
+                </div>
+              )}
             </div>
           </form>
         </>

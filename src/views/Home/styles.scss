@@ -36,6 +36,26 @@
     flex-direction: column;
     justify-content: center;
 
+    .MuiTextField-root {
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        appearance: none !important;
+        -webkit-appearance: none !important;
+      }
+
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+    }
+
+    &__errors {
+      color: red;
+      font-weight: 300;
+      font-size: 14px;
+
+      margin-top: -10px;
+    }
+
     & span {
       margin-bottom: 8px;
       font-weight: 400;
