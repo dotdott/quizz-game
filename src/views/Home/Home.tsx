@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { Types } from "store/reducers/questionsReducer";
+import History from "./components/History";
 
 interface ICategoriesData {
   id: number;
@@ -90,6 +91,8 @@ const Home = () => {
         <LoadingScreen />
       ) : (
         <>
+          <History />
+
           <div className="home__welcome">
             <div>
               <h1>Hello, welcome sir!</h1>

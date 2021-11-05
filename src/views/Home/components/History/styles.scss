@@ -1,0 +1,41 @@
+@import "../../../../global/global.scss";
+
+.history_wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  position: absolute;
+  top: 5%;
+
+  margin-left: 16px;
+
+  color: $main-red;
+
+  cursor: pointer;
+
+  & p {
+    font-size: 20px;
+    font-weight: 500;
+    padding-right: 12px;
+  }
+
+  &:hover {
+    border-bottom: 2px solid $main-red;
+  }
+}
+
+.drawer-items {
+  padding: 16px;
+
+  font-size: 18px;
+
+  & ol {
+    padding-left: 16px;
+    cursor: pointer;
+
+    li {
+      margin-bottom: 8px;
+    }
+  }
+}
