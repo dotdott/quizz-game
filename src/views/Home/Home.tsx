@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { Types } from "store/reducers/questionsReducer";
 import History from "./components/History";
+import { useHistory } from "react-router";
 
 interface ICategoriesData {
   id: number;
@@ -38,6 +39,7 @@ const Home = () => {
     setSelectedCategory(value);
   };
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const formik = useFormik({
     initialValues: {
@@ -60,12 +62,14 @@ const Home = () => {
   const hasErrors = formik.touched && formik.errors.amount ? true : false;
 
   const handleSubmit = async (amount: string) => {
-    return dispatch({
+    dispatch({
       type: Types.QUESTIONS_REQUEST,
       category_id: selectedCategory.id,
       amount_questions: amount,
       difficulty: difficulty,
     });
+
+    return history.push("/questions");
   };
 
   useEffect(() => {

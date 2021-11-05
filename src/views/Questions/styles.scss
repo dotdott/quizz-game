@@ -1,0 +1,69 @@
+@import "../../global/global.scss";
+
+.questions {
+  width: 100vw;
+  height: 100vh;
+
+  padding: 16px;
+
+  padding-top: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  font-family: "Roboto", sans-serif;
+
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    height: 80%;
+  }
+
+  .my_badge.false {
+    span {
+      background: #000 !important;
+      opacity: 0.8;
+    }
+  }
+
+  &__section {
+    margin-top: 2.5rem;
+
+    max-width: 900px;
+    min-width: 900px;
+
+    &__sub-header {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      margin-bottom: 16px;
+
+      & span {
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__navigation {
+    margin-top: 22px;
+
+    display: flex;
+    justify-content: space-between;
+
+    &.flexEnd {
+      justify-content: end;
+    }
+
+    max-width: 900px;
+    width: 100%;
+
+    & button {
+      width: 150px;
+    }
+  }
+}
