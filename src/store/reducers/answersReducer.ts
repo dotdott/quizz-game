@@ -2,38 +2,79 @@ import { createActions, createReducer } from "reduxsauce";
 import { IQuestionData } from "./questionsReducer";
 
 export interface IAnswersState {
-  stateQuestions: IAnswers;
+  stateAnswers: IAnswers;
 }
 export interface IAnswers {
   total_correct: number;
-  date: string;
+  date: Date;
 
-  answers: {
-    is_correct: boolean;
+  answers: IAnswerData[];
+}
 
-    questions: IQuestionData;
-  }[];
+interface IAnswerData extends IQuestionData {
+  id: number;
+  selected_question: string;
 }
 
 const INITIAL_STATE: IAnswers = {
   total_correct: 0,
-  date: "",
+  date: new Date(),
 
   answers: [],
 };
 
 export const { Types, Creators } = createActions({
-  setAnswers: ["answers", "total_correct", "date"],
+  setAnswers: ["answers"],
 
   CleanAnswers: [],
 });
 
-const setAnswers = (state = INITIAL_STATE, action) => ({
-  ...state,
-  answers: action.answers,
-  total_correct: action.total_correct,
-  date: action.date,
-});
+const setAnswers = (state = INITIAL_STATE, action) => {
+  const { answer } = action;
+
+  let total = state.total_correct;
+  let newAnswers = [...state.answers, answer];
+
+  const checkIfAnswersIsAlreadedInReducer = state.answers.filter(
+    (item) => item.id === answer.id
+  );
+
+  if (checkIfAnswersIsAlreadedInReducer.length > 0) {
+    const newValues = state.answers.map((item) => {
+      if (item.id === answer.id) {
+        if (answer.correct_answer === answer.selected_question) {
+          total++;
+        }
+
+        if (total > 0 && answer.correct_answer !== answer.selected_question) {
+          total--;
+        }
+
+        return answer;
+      }
+
+      return item;
+    });
+
+    newAnswers = newValues;
+  }
+
+  if (checkIfAnswersIsAlreadedInReducer.length === 0) {
+    if (answer.correct_answer === answer.selected_question) {
+      total++;
+    }
+
+    if (total > 0 && answer.correct_answer !== answer.selected_question) {
+      total--;
+    }
+  }
+
+  return {
+    ...state,
+    answers: newAnswers,
+    total_correct: total,
+  };
+};
 
 const CleanAnswers = (state = INITIAL_STATE, action) => {
   return INITIAL_STATE;

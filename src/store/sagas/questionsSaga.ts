@@ -28,7 +28,6 @@ export function* questionsSaga(action) {
 
     data = response.data.results;
 
-    console.log(data);
     yield put({ type: Types.QUESTIONS_SUCCESS, data });
   } catch (error) {
     let message = "An Unknown Error has occurred!";

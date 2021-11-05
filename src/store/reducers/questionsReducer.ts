@@ -4,7 +4,7 @@ export interface IQuestionsState {
   stateQuestions: IQuestions;
 }
 export interface IQuestions {
-  data: IQuestionData[];
+  data?: IQuestionData[];
   isLoading: boolean;
 
   error: string;
@@ -19,7 +19,7 @@ export interface IQuestionData {
 
   question: string;
 
-  correct_answers: string;
+  correct_answer: string;
 
   incorrect_answers: string[];
 }
