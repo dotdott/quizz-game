@@ -67,6 +67,12 @@ const Questions = () => {
     }
   }, [currentQuestion]);
 
+  useEffect(() => {
+    if (data && !isLoading) {
+      if (data.length === 0) return history.push("/");
+    }
+  }, [data]);
+
   return (
     <div className="questions">
       {isLoading ? (
