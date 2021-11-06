@@ -22,6 +22,7 @@ export interface IQuestionData {
   correct_answer: string;
 
   incorrect_answers: string[];
+  shuffled_array: string[];
 }
 
 const INITIAL_STATE: IQuestions = {

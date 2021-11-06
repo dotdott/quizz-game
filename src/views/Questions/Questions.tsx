@@ -5,18 +5,19 @@ import {
   Step,
   Stepper,
 } from "@material-ui/core";
+
 import { Button, LoadingScreen } from "components";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { IAnswersState, Types } from "store/reducers/answersReducer";
 import { IQuestionsState } from "store/reducers/questionsReducer";
+
 import "./styles.scss";
 
 const Questions = () => {
   const [selectedQuestion, setSelectedQuestion] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [shuffledQuestions, setShuffledQuestions] = useState<string[]>([]);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -28,16 +29,6 @@ const Questions = () => {
   const { answers } = useSelector((state: IAnswersState) => state.stateAnswers);
 
   const question = data && data[currentQuestion];
-
-  const shuffleQuestionsArray = (incorrectQuestions: string[]) => {
-    if (question?.correct_answer) {
-      const fullArray = [question.correct_answer, ...incorrectQuestions];
-
-      const shuffledArray = fullArray.sort(() => Math.random() - 0.5);
-
-      return shuffledArray;
-    }
-  };
 
   const handleSetNextQuestion = () => {
     if (selectedQuestion === "") return;
@@ -75,14 +66,6 @@ const Questions = () => {
       );
     }
   }, [currentQuestion]);
-
-  useEffect(() => {
-    if (question) {
-      const newQuestions = shuffleQuestionsArray(question.incorrect_answers);
-
-      return setShuffledQuestions(newQuestions ?? []);
-    }
-  }, [question]);
 
   return (
     <div className="questions">
@@ -122,9 +105,9 @@ const Questions = () => {
                 </h3>
               </div>
 
-              {shuffledQuestions &&
-                shuffledQuestions.length > 0 &&
-                shuffledQuestions.map((question) => (
+              {question &&
+                question.shuffled_array.length > 0 &&
+                question.shuffled_array.map((question) => (
                   <div className="questions__options" key={question}>
                     <FormControlLabel
                       label={question}
