@@ -36,10 +36,10 @@ $font-eight: 0.5rem;
 
   font-family: "Roboto", sans-serif;
 
-  overflow-x: hidden;
+  // overflow-x: hidden;
 }
 
-.App {
+.bg-color {
   background-color: #cddcdc;
   background-image: radial-gradient(
       at 50% 100%,

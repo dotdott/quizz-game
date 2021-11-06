@@ -7,17 +7,25 @@ import {
 } from "@material-ui/core";
 
 import { Button, LoadingScreen } from "components";
+import QuizzList from "components/QuizzList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import {
+  IAnswerHistoryData,
+  Types as TypesHistory,
+} from "store/reducers/answerHistory";
 import { IAnswersState, Types } from "store/reducers/answersReducer";
 import { IQuestionsState } from "store/reducers/questionsReducer";
+import { v4 as uuidv4 } from "uuid";
 
 import "./styles.scss";
 
 const Questions = () => {
   const [selectedQuestion, setSelectedQuestion] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [results, setResults] = useState<IAnswerHistoryData | null>(null);
+  const [hasSavedResults, setHasSavedResults] = useState(false);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -26,34 +34,63 @@ const Questions = () => {
     (state: IQuestionsState) => state.stateQuestions
   );
 
-  const { answers } = useSelector((state: IAnswersState) => state.stateAnswers);
+  const { answers, date, total_correct } = useSelector(
+    (state: IAnswersState) => state.stateAnswers
+  );
 
   const question = data && data[currentQuestion];
-  const lastQuestions = data && data.length > 0 ? data[data.length - 1] : 0;
+  const lastQuestions =
+    data && data.length > 0 ? data.length - 1 === currentQuestion : false;
 
   const handleSetNextQuestion = () => {
-    if (selectedQuestion === "" || lastQuestions === 0) return;
+    if (selectedQuestion === "") return;
+    const answersFormatted = Object.assign(
+      {
+        id: currentQuestion,
+        selected_question: selectedQuestion,
+      },
+      question
+    );
 
-    if (question && data && data.length !== currentQuestion) {
-      const answersFormatted = Object.assign(
-        {
-          id: currentQuestion,
-          selected_question: selectedQuestion,
-        },
-        question
-      );
-
+    // check if isnt last question, then proceed to storage answer in reducer
+    // and paginate to next question.
+    if (question && data && !lastQuestions) {
       dispatch({
         type: Types.SET_ANSWERS,
         answer: answersFormatted,
       });
 
-      setCurrentQuestion((prev) => prev + 1);
+      return setCurrentQuestion((prev) => prev + 1);
+    }
+
+    if (lastQuestions) {
+      const formattedLastData: IAnswerHistoryData = {
+        id: uuidv4(),
+        date,
+        total_correct:
+          selectedQuestion === question?.correct_answer
+            ? total_correct + 1
+            : total_correct,
+        answers: [...answers, answersFormatted],
+      };
+
+      return setResults(formattedLastData);
     }
   };
 
   const handleSetPreviousQuestion = () => {
     setCurrentQuestion((prev) => prev - 1);
+  };
+
+  const handleSaveHistory = () => {
+    if (hasSavedResults || results === null) return;
+
+    dispatch({
+      type: TypesHistory.SET_ANSWER_HISTORY,
+      answer_history: results,
+    });
+
+    return setHasSavedResults(true);
   };
 
   useEffect(() => {
@@ -68,23 +105,23 @@ const Questions = () => {
     }
   }, [currentQuestion]);
 
-  // useEffect(() => {
-  //   if (data && !isLoading) {
-  //     if (data.length === 0) return history.push("/");
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data && !isLoading) {
+      if (data.length === 0) return history.push("/");
+    }
+  }, [data]);
 
   return (
-    <div className="questions">
+    <div className="questions bg-color">
       {isLoading ? (
         <LoadingScreen />
-      ) : (
+      ) : results === null ? (
         <>
-          <Stepper activeStep={1} nonLinear sx={{ width: 900 }}>
+          <Stepper activeStep={currentQuestion} nonLinear sx={{ width: 900 }}>
             {data &&
               data.length > 0 &&
               Array.from({ length: data.length }).map((arr, index) => (
-                <Step key={index}>
+                <Step key={index + 1}>
                   <Badge
                     color={`${
                       currentQuestion === index ? "secondary" : "success"
@@ -143,13 +180,29 @@ const Questions = () => {
                 </Button>
               )}
               <Button
-                btnClasses={`${lastQuestions !== 0 ? "_red" : "_blue"}`}
+                btnClasses={`${!lastQuestions ? "_red" : "_blue"}`}
                 btnFunction={handleSetNextQuestion}
               >
-                {lastQuestions !== 0 ? "Next" : "Finish"}
+                {!lastQuestions ? "Next" : "Finish"}
               </Button>
             </div>
           </div>
+        </>
+      ) : (
+        <>
+          <div className="questions__results">
+            <span>12312</span>
+            <Button
+              btnClasses="_red"
+              btnExtraStyles={{ minWidth: 200 }}
+              btnFunction={handleSaveHistory}
+              disabled={hasSavedResults}
+            >
+              Save History
+            </Button>
+          </div>
+
+          <QuizzList answer={results} />
         </>
       )}
     </div>

@@ -6,7 +6,7 @@ import History from "views/History";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App bg-color">
       <Router>
         <Switch>
           <Route exact path="/" component={Home} />

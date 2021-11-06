@@ -1,8 +1,8 @@
 @import "../../global/global.scss";
 
 .questions {
-  width: 100vw;
-  height: 100vh;
+  max-width: 100vw;
+  min-height: 100vh;
 
   padding: 16px;
 
@@ -26,8 +26,16 @@
   .my_badge.false {
     span {
       background: #000 !important;
+
       opacity: 0.8;
     }
+  }
+
+  &__results {
+    display: flex;
+    justify-content: space-between;
+
+    width: 900px;
   }
 
   &__section {

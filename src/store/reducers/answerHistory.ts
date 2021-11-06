@@ -1,6 +1,5 @@
 import { createActions, createReducer } from "reduxsauce";
 import { IAnswers } from "./answersReducer";
-import { IQuestionData } from "./questionsReducer";
 
 export interface IAnswerHistoryState {
   stateAnswerHistory: IAnswerHistory;
@@ -12,7 +11,7 @@ export interface IAnswerHistory {
   foundedAnswers: IAnswerHistoryData | null;
 }
 
-interface IAnswerHistoryData extends IAnswers {
+export interface IAnswerHistoryData extends IAnswers {
   id: number | null;
 }
 
@@ -32,7 +31,7 @@ export const { Types, Creators } = createActions({
 
 const setAnswerHistory = (state = INITIAL_STATE, action) => ({
   ...state,
-  answer_history: action.answer_history,
+  answer_history: [...state.answer_history, action.answer_history],
 });
 
 const getAnswerHistory = (state = INITIAL_STATE, action) => {

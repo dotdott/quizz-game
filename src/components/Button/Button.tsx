@@ -8,6 +8,7 @@ interface IButtonProps {
   btnExtraStyles?: {};
   children?: React.ReactNode;
   type?: "button" | "submit";
+  disabled?: boolean;
 }
 
 const Button = ({
@@ -16,6 +17,7 @@ const Button = ({
   btnExtraStyles,
   children,
   type = "button",
+  disabled,
 }: IButtonProps) => {
   return (
     <MU.Button
@@ -23,6 +25,7 @@ const Button = ({
       className={`button ${btnClasses}`}
       onClick={btnFunction}
       type={type}
+      disabled={disabled}
     >
       {children}
     </MU.Button>

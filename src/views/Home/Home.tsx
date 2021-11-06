@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { Types } from "store/reducers/questionsReducer";
+import { Types as TypesAnswers } from "store/reducers/answersReducer";
 import History from "./components/History";
 import { useHistory } from "react-router";
 
@@ -67,6 +68,12 @@ const Home = () => {
       category_id: selectedCategory.id,
       amount_questions: amount,
       difficulty: difficulty,
+    });
+
+    // reducer would keep previous answered question storage
+    // so cleaning whenever user starts a new quizz.
+    dispatch({
+      type: TypesAnswers.CLEAN_ANSWERS,
     });
 
     return history.push("/questions");
