@@ -35,11 +35,9 @@ $font-eight: 0.5rem;
   box-sizing: border-box;
 
   font-family: "Roboto", sans-serif;
-}
 
-// html {
-//   filter: brightness(0.5);
-// }
+  overflow-x: hidden;
+}
 
 .App {
   background-color: #cddcdc;

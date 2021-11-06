@@ -11,7 +11,7 @@ export interface IAnswers {
   answers: IAnswerData[];
 }
 
-interface IAnswerData extends IQuestionData {
+export interface IAnswerData extends IQuestionData {
   id: number;
   selected_question: string;
 }

@@ -29,9 +29,10 @@ const Questions = () => {
   const { answers } = useSelector((state: IAnswersState) => state.stateAnswers);
 
   const question = data && data[currentQuestion];
+  const lastQuestions = data && data.length > 0 ? data[data.length - 1] : 0;
 
   const handleSetNextQuestion = () => {
-    if (selectedQuestion === "") return;
+    if (selectedQuestion === "" || lastQuestions === 0) return;
 
     if (question && data && data.length !== currentQuestion) {
       const answersFormatted = Object.assign(
@@ -67,11 +68,11 @@ const Questions = () => {
     }
   }, [currentQuestion]);
 
-  useEffect(() => {
-    if (data && !isLoading) {
-      if (data.length === 0) return history.push("/");
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data && !isLoading) {
+  //     if (data.length === 0) return history.push("/");
+  //   }
+  // }, [data]);
 
   return (
     <div className="questions">
@@ -141,8 +142,11 @@ const Questions = () => {
                   Previous
                 </Button>
               )}
-              <Button btnClasses="_red" btnFunction={handleSetNextQuestion}>
-                Next
+              <Button
+                btnClasses={`${lastQuestions !== 0 ? "_red" : "_blue"}`}
+                btnFunction={handleSetNextQuestion}
+              >
+                {lastQuestions !== 0 ? "Next" : "Finish"}
               </Button>
             </div>
           </div>
