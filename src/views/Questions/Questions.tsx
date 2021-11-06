@@ -191,7 +191,7 @@ const Questions = () => {
       ) : (
         <>
           <div className="questions__results">
-            <span>12312</span>
+            <span>{new Date(results.date).toLocaleDateString("BRL")}</span>
             <Button
               btnClasses="_red"
               btnExtraStyles={{ minWidth: 200 }}

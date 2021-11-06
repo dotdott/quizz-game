@@ -12,10 +12,11 @@ const QuizzList = ({ answer }: { answer: IAnswerHistoryData }) => {
     )
       return "wrong";
 
-    if (currentQuestion === correctAnswer && selectedQuestion === correctAnswer)
+    if (
+      currentQuestion === correctAnswer &&
+      (selectedQuestion === correctAnswer || selectedQuestion !== correctAnswer)
+    )
       return "correct";
-
-    if (currentQuestion === correctAnswer) return "correct";
 
     return "";
   };
